@@ -1,0 +1,33 @@
+.App {
+  text-align: center;
+}
+
+.pageWrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+ .wrapper{
+  text-align: center;
+  height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: #191212;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  font-family: monospace;
+  margin: 10px;
+ }
+
+ pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }

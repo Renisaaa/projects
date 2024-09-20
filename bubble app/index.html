@@ -1,0 +1,134 @@
+<html>
+  <head>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="800" height="500"></canvas>
+    <button id="resetButton">Reset</button>
+    <script>
+      const canvas = document.getElementById("myCanvas");
+      const ctx = canvas.getContext("2d");
+      const resetButton = document.getElementById("resetButton");
+      const colors = ["red", "blue", "green", "purple"];
+      let intervalId;
+      
+      // Draw the initial state of the circles and arrows
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw the circles
+        for (let i = 0; i < 4; i++) {
+          ctx.beginPath();
+          ctx.arc(50, 50 + i * 100, 40, 0, 2 * Math.PI);
+          ctx.fillStyle = colors[i];
+          ctx.fill();
+          ctx.stroke();
+        }
+        
+        // Draw the arrows
+        for (let i = 0; i < 4; i++) {
+          ctx.beginPath();
+          ctx.moveTo(500, 75 + i * 100);
+          ctx.lineTo(700, 75 + i * 100);
+          ctx.moveTo(500, 75 + i * 100);
+          ctx.lineTo(515, (75 + i * 100) - 15);
+          ctx.moveTo(500, 75 + i * 100);
+          ctx.lineTo(515, (75 + i * 100) + 15);
+          ctx.closePath();
+          ctx.fillStyle = colors[i];
+          ctx.fill();
+          ctx.stroke();
+        }
+      }
+      
+      draw();
+      
+      // Handle click events on the canvas
+      canvas.addEventListener("click", function(event) {
+        let x = event.clientX - canvas.offsetLeft;
+        let y = event.clientY - canvas.offsetTop;
+        
+        // Determine which circle was clicked
+        for (let i = 0; i < 4; i++) {
+          let circleX = 50;
+          let circleY = 50 + i * 100;
+          let radius = 40;
+          
+          if (Math.pow(x - circleX, 2) + Math.pow(y - circleY, 2) < Math.pow(radius, 2)) {
+            // Animate the arrow hitting the circle
+            let arrowX = 500;
+            let arrowY = 75 + i * 100;
+            let xxx = 700;
+            let color = colors[i];
+            intervalId = setInterval(function() {
+              arrowX -= 1;
+              xxx -= 1;
+              
+              if (arrowX <= circleX) {
+                clearInterval(intervalId);
+                ctx.beginPath();
+                ctx.arc(circleX, circleY, radius, 0, 2 * Math.PI);
+                ctx.fillStyle = "gray";
+                ctx.fill();
+                ctx.stroke();
+             
+              } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw the circles
+                for (let j = 0; j < 4; j++) {
+                  ctx.beginPath();
+                  ctx.arc(50, 50 + j * 100, 40, 0, 2 * Math.PI);
+                  ctx.fillStyle = colors[j];
+                  ctx.fill();
+                  ctx.stroke();
+                }
+                
+                // Draw the arrows
+                for (let j = 0; j < 4; j++) {
+                  if(j == i) {
+                    ctx.beginPath();
+                    ctx.moveTo(arrowX, arrowY);
+                    ctx.lineTo(xxx, arrowY);
+                    ctx.moveTo(arrowX, 75 + i * 100);
+                    ctx.lineTo(arrowX+15, (75 + i * 100) - 15);
+                    ctx.moveTo(arrowX, 75 + i * 100);
+                    ctx.lineTo(arrowX+15, (75 + i * 100) + 15);
+                    ctx.closePath();
+                    ctx.fillStyle = (j === i) ? "gray" : colors[j];
+                    ctx.fill();
+                    ctx.stroke();
+                  } else {
+                      ctx.beginPath();
+                      ctx.moveTo(500, 75 + j * 100);
+                      ctx.lineTo(700, 75 + j * 100);
+                      ctx.moveTo(500, 75 + j * 100);
+                      ctx.lineTo(515, (75 + j * 100) - 15);
+                      ctx.moveTo(500, 75 + j * 100);
+                      ctx.lineTo(515, (75 + j * 100) + 15);
+                      ctx.closePath();
+                      ctx.fillStyle = colors[j];
+                      ctx.fill();
+                      ctx.stroke();
+                  }
+                }
+              }
+            }, 10);
+            
+            break;
+          }
+        }
+      });
+      
+      // Handle click events on the reset button
+      resetButton.addEventListener("click", function() {
+        clearInterval(intervalId);
+        draw();
+      });
+    </script>
+  </body>
+</html>
